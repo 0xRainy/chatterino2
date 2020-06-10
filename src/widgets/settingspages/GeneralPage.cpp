@@ -354,6 +354,11 @@ void GeneralPage::initLayout(SettingsLayout &layout)
     layout.addCheckbox("Show message length while typing", s.showMessageLength);
 
     layout.addTitle("Messages");
+    layout.addDropdown<int>(
+        "# of Messages to display", {"1000", "5000", "10000"},
+        s.messagesBuffer,
+        [](auto val) { return QString::number(val); },
+        [](auto args) { return fuzzyToInt(args.value, 1000); });
     layout.addCheckbox("Seperate with lines", s.separateMessages);
     layout.addCheckbox("Alternate background color", s.alternateMessages);
     // layout.addCheckbox("Mark last message you read");

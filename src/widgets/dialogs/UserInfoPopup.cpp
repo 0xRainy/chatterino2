@@ -237,7 +237,7 @@ UserInfoPopup::UserInfoPopup()
         });
     }
 
-	// fourth line (last messages)
+    // fourth line (last messages)
     this->latestMessages_ = new ChannelView();
     this->latestMessages_->setMinimumSize(150, 300);
     this->latestMessages_->setSizePolicy(QSizePolicy::Expanding,
@@ -394,7 +394,7 @@ void UserInfoPopup::setData(const QString &name, const ChannelPtr &channel)
 
     this->userStateChanged_.invoke();
 
-	this->latestMessages_->setChannel(
+    this->latestMessages_->setChannel(
         filterMessages(this->userName_, this->channel_));
 }
 

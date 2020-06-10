@@ -14,9 +14,9 @@
 #include "util/LayoutCreator.hpp"
 #include "util/PostToThread.hpp"
 #include "widgets/Label.hpp"
+#include "widgets/helper/ChannelView.hpp"
 #include "widgets/helper/EffectLabel.hpp"
 #include "widgets/helper/Line.hpp"
-#include "widgets/helper/ChannelView.hpp"
 
 #include <QCheckBox>
 #include <QDesktopServices>

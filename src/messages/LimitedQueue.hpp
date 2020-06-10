@@ -32,7 +32,7 @@ protected:
     using ChunkVector = std::vector<std::shared_ptr<Chunk>>;
 
 public:
-    LimitedQueue(size_t limit = 1000)
+    LimitedQueue(size_t limit = 10000)
         : limit_(limit)
     {
         this->clear();

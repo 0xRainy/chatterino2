@@ -11,6 +11,8 @@ https://github.com/0xRainy/chatterino2/tree/IncreaseMessageBuffer
 
 And some slight in-progress changes to some of those patches
 
+You will have to build this yourself, I will not be providing releases as this is mainly for my personal use until these PRs are merged
+
 
 
 

@@ -1,8 +1,18 @@
 ![alt text](https://fourtf.com/img/chatterino-icon-64.png)
-Chatterino 2
+Chatterino 2 - RainyPatched
 ============
-
 Chatterino 2 is the second installment of the Twitch chat client series "Chatterino".
+## Patches Applied
+https://github.com/Chatterino/chatterino2/pull/1674
+
+https://github.com/Chatterino/chatterino2/pull/1729
+
+https://github.com/0xRainy/chatterino2/tree/IncreaseMessageBuffer
+
+And some slight in-progress changes to some of those patches
+
+
+
 
 ## Download
 Current releases are available at [https://chatterino.com](https://chatterino.com).

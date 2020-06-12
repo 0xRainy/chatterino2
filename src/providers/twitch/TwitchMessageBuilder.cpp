@@ -523,11 +523,11 @@ void TwitchMessageBuilder::addTextOrEmoji(const QString &string_)
         {
             QString username = match.captured(1);
             this->emplace<TextElement>(string, MessageElementFlag::BoldUsername,
-                                       textColor, FontStyle::ChatMediumBold)
+                                       usernameColor_, FontStyle::ChatMediumBold)
                 ->setLink({Link::UserInfo, username});
 
             this->emplace<TextElement>(
-                    string, MessageElementFlag::NonBoldUsername, textColor)
+                    string, MessageElementFlag::NonBoldUsername, usernameColor_)
                 ->setLink({Link::UserInfo, username});
             return;
         }
@@ -539,7 +539,7 @@ void TwitchMessageBuilder::addTextOrEmoji(const QString &string_)
         if (chatters->contains(string))
         {
             this->emplace<TextElement>(string, MessageElementFlag::BoldUsername,
-                                       textColor, FontStyle::ChatMediumBold)
+                                       usernameColor_, FontStyle::ChatMediumBold)
                 ->setLink({Link::UserInfo, string});
 
             this->emplace<TextElement>(

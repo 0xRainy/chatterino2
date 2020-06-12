@@ -355,7 +355,7 @@ void GeneralPage::initLayout(SettingsLayout &layout)
 
     layout.addTitle("Messages");
     layout.addDropdown<int>(
-        "# of Messages to display", {"1000", "5000", "10000"},
+        "# of Messages to display", {"1000", "5000", "10000", "50000", "100000"},
         s.messagesBuffer,
         [](auto val) { return QString::number(val); },
         [](auto args) { return fuzzyToInt(args.value, 1000); });

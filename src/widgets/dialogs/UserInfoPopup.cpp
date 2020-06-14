@@ -78,14 +78,12 @@ namespace {
 }  // namespace
 
 UserInfoPopup::UserInfoPopup()
-    : BaseWindow(BaseWindow::EnableCustomFrame)
+    : BaseWindow(BaseWindow::FramelessDraggable)
     , hack_(new bool)
 {
     this->setWindowTitle("Usercard");
     this->setStayInScreenRect(true);
-#ifdef Q_OS_LINUX
-    this->setWindowFlag(Qt::Dialog);
-#endif
+    this->setWindowFlag(Qt::FramelessWindowHint);
 
     // Close the popup when Escape is pressed
     createWindowShortcut(this, "Escape", [this] { this->deleteLater(); });

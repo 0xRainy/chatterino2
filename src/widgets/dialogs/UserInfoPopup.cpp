@@ -13,6 +13,7 @@
 #include "singletons/Settings.hpp"
 #include "util/LayoutCreator.hpp"
 #include "util/PostToThread.hpp"
+#include "util/Shortcut.hpp"
 #include "widgets/Label.hpp"
 #include "widgets/helper/ChannelView.hpp"
 #include "widgets/helper/EffectLabel.hpp"
@@ -64,10 +65,19 @@ namespace {
         {
             MessagePtr message = snapshot[i];
 
+            bool isSubscription =
+                message->flags.has(MessageFlag::Subscription) &&
+                message->loginName == "" &&
+                message->messageText.split(" ").at(0).compare(
+                    userName, Qt::CaseInsensitive) == 0;
+
+            bool isModAction = message->timeoutUser.compare(
+                                   userName, Qt::CaseInsensitive) == 0;
             bool isSelectedUser =
                 message->loginName.compare(userName, Qt::CaseInsensitive) == 0;
 
-            if (isSelectedUser && !message->flags.has(MessageFlag::Whisper))
+            if ((isSubscription || isModAction || isSelectedUser) &&
+                !message->flags.has(MessageFlag::Whisper))
             {
                 channelPtr->addMessage(message);
             }
@@ -83,9 +93,9 @@ UserInfoPopup::UserInfoPopup()
 {
     this->setWindowTitle("Usercard");
     this->setStayInScreenRect(true);
-#ifdef Q_OS_LINUX
-    this->setWindowFlag(Qt::Popup);
-#endif
+
+    // Close the popup when Escape is pressed
+    createWindowShortcut(this, "Escape", [this] { this->deleteLater(); });
 
     auto layout = LayoutCreator<QWidget>(this->getLayoutContainer())
                       .setLayoutType<QVBoxLayout>();
@@ -141,7 +151,8 @@ UserInfoPopup::UserInfoPopup()
             .assign(&this->ui_.ignoreHighlights);
         auto usercard = user.emplace<EffectLabel2>(this);
         usercard->getLabel().setText("Usercard");
-
+        auto refresh = user.emplace<EffectLabel2>(this);
+        refresh->getLabel().setText("Refresh");
         auto mod = user.emplace<Button>(this);
         mod->setPixmap(getResources().buttons.mod);
         mod->setScaleIndependantSize(30, 30);
@@ -157,6 +168,8 @@ UserInfoPopup::UserInfoPopup()
                                       "/viewercard/" + this->userName_);
         });
 
+        QObject::connect(refresh.getElement(), &Button::leftClicked,
+                         [this] { this->updateLatestMessages(); });
         QObject::connect(mod.getElement(), &Button::leftClicked, [this] {
             this->channel_->sendMessage("/mod " + this->userName_);
         });
@@ -247,22 +260,13 @@ UserInfoPopup::UserInfoPopup()
         this->ui_.noMessagesLabel->setVisible(false);
 
         this->ui_.latestMessages = new ChannelView(this);
-        this->ui_.latestMessages->setMinimumSize(400, 175);
+        this->ui_.latestMessages->setMinimumSize(400, 275);
         this->ui_.latestMessages->setSizePolicy(QSizePolicy::Expanding,
                                                 QSizePolicy::Expanding);
 
-        this->ui_.refreshButton = new QPushButton(this);
-        this->ui_.refreshButton->setText("Refresh");
-        this->ui_.refreshButton->QObject::connect(
-            this->ui_.refreshButton, &QPushButton::clicked,
-            [this] { this->updateLatestMessages(); });
-
         logs->addWidget(this->ui_.noMessagesLabel);
         logs->addWidget(this->ui_.latestMessages);
-        logs->addWidget(this->ui_.refreshButton);
         logs->setAlignment(this->ui_.noMessagesLabel, Qt::AlignHCenter);
-		// Conflicts with desired funct of having multiple windows at once, because unable to close window if frameless
-        // layout->addWidget(new QSizeGrip(this), 0, Qt::AlignBottom | Qt::AlignRight);
     }
 
     this->installEvents();
@@ -424,6 +428,7 @@ void UserInfoPopup::updateLatestMessages()
 {
     auto filteredChannel = filterMessages(this->userName_, this->channel_);
     this->ui_.latestMessages->setChannel(filteredChannel);
+    this->ui_.latestMessages->setSourceChannel(this->channel_);
 
     const bool hasMessages = filteredChannel->hasMessages();
     this->ui_.latestMessages->setVisible(hasMessages);

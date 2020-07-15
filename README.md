@@ -3,15 +3,12 @@ Chatterino 2 - RainyPatched
 ============
 Chatterino 2 is the second installment of the Twitch chat client series "Chatterino".
 ## Patches Applied
-https://github.com/Chatterino/chatterino2/pull/1674
-
-https://github.com/Chatterino/chatterino2/pull/1729
 
 https://github.com/0xRainy/chatterino2/tree/IncreaseMessageBuffer
 
 And some slight in-progress changes to some of those patches
 
-You will have to build this yourself, I will not be providing releases as this is mainly for my personal use until these PRs are merged
+You will have to build this yourself, I will not be providing releases as this is mainly for my personal use
 
 
 
